@@ -2,16 +2,12 @@ import sys
 import numpy as np
 
 def verify(n: int):
-    # Загружаем матрицы из текстовых файлов (без заголовков)
-    A = np.loadtxt("data/A.txt", dtype=np.float64).reshape(n, n)
-    B = np.loadtxt("data/B.txt", dtype=np.float64).reshape(n, n)
-    C = np.loadtxt("data/C.txt", dtype=np.float64).reshape(n, n)
-
-    # Эталонное умножение через NumPy
+    A = np.loadtxt("data/A.txt", dtype=np.float32).reshape(n, n)
+    B = np.loadtxt("data/B.txt", dtype=np.float32).reshape(n, n)
+    C = np.loadtxt("data/C.txt", dtype=np.float32).reshape(n, n)
     C_expected = A @ B
-
-    if np.allclose(C, C_expected, rtol=1e-10, atol=1e-12):
-        print("Проверка пройдена: результат C++ совпадает с NumPy.")
+    if np.allclose(C, C_expected, rtol=1e-4, atol=1e-5):
+        print("Проверка пройдена: результат CUDA совпадает с NumPy.")
     else:
         print("Проверка НЕ пройдена! Обнаружены расхождения.")
         max_err = np.max(np.abs(C - C_expected))
